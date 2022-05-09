@@ -29,9 +29,18 @@ public class JpaMain {
             member.setAge(10);
             em.persist(member);
 
-            TypedQuery<Member> q = em.createQuery("select m from Member m", Member.class);
-            TypedQuery<String> q2 = em.createQuery("select m.username from Member m", String.class);
-            Query q3 = em.createQuery("select m.username, m.age from Member m");
+            TypedQuery<Member> q = em.createQuery("select m from Member m where m.id = '10'", Member.class);
+            Member singleResult = em.createQuery("select m from Member m where m.username = :username", Member.class)
+                    .setParameter("username", "member1")
+                    .getSingleResult();
+            System.out.println("singleResult = " + singleResult.getUsername());
+//            TypedQuery<String> q2 = em.createQuery("select m.username from Member m", String.class);
+//            Query q3 = em.createQuery("select m.username, m.age from Member m");
+
+            Member result = q.getSingleResult();
+            //Spring Data JPA ->
+            System.out.println("result = " + result);
+
 
             tx.commit();
         } catch (Exception e) {
