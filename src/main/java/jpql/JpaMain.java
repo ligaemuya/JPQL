@@ -23,13 +23,7 @@ public class JpaMain {
             Root<Member> m = query.from(Member.class);
             CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"), "kim"));
             List<Member> resultList = em.createQuery(cq).getResultList();*/
-
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(10);
-            em.persist(member);
-
-            TypedQuery<Member> q = em.createQuery("select m from Member m where m.id = '10'", Member.class);
+       /* TypedQuery<Member> q = em.createQuery("select m from Member m where m.id = '10'", Member.class);
             Member singleResult = em.createQuery("select m from Member m where m.username = :username", Member.class)
                     .setParameter("username", "member1")
                     .getSingleResult();
@@ -39,8 +33,21 @@ public class JpaMain {
 
             Member result = q.getSingleResult();
             //Spring Data JPA ->
-            System.out.println("result = " + result);
+            System.out.println("result = " + result);*/
 
+
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setAge(10);
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
+            List<Team> membersTeam = em.createQuery("select t from Member m join m.team t", Team.class).getResultList();
+
+            Member findMember = members.get(0);
+            findMember.setAge(20);
 
             tx.commit();
         } catch (Exception e) {
