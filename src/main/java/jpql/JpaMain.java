@@ -49,6 +49,15 @@ public class JpaMain {
             Member findMember = members.get(0);
             findMember.setAge(20);
 
+            em.createQuery("select o.address from Order o", Address.class).getResultList();
+            List<MemberDTO> resultList = em.createQuery("select new jpql.MemberDTO (m.username, m.age) from Member m", MemberDTO.class).getResultList();
+
+            MemberDTO memberDTO = resultList.get(0);
+            MemberDTO memberDTO2 = resultList.get(0);
+            memberDTO2.setName("user1");
+            System.out.println("memberDTO = " + memberDTO.getName());
+            System.out.println("memberDTO = " + memberDTO.getAge());
+
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
