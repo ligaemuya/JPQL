@@ -1,6 +1,7 @@
 package jpql;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -36,27 +37,46 @@ public class JpaMain {
             System.out.println("result = " + result);*/
 
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(10);
-            em.persist(member);
+//            Member member = new Member();
+//            member.setUsername("member1");
+//            member.setAge(10);
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
+//            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
+//            List<Team> membersTeam = em.createQuery("select t from Member m join m.team t", Team.class).getResultList();
+//
+//            Member findMember = members.get(0);
+//            findMember.setAge(20);
+//
+//            em.createQuery("select o.address from Order o", Address.class).getResultList();
+//            List<MemberDTO> resultList = em.createQuery("select new jpql.MemberDTO (m.username, m.age) from Member m", MemberDTO.class).getResultList();
+//
+//            MemberDTO memberDTO = resultList.get(0);
+//            MemberDTO memberDTO2 = resultList.get(0);
+//            memberDTO2.setName("user1");
+//            System.out.println("memberDTO = " + memberDTO.getName());
+//            System.out.println("memberDTO = " + memberDTO.getAge());
+
+            Member member1 = new Member();
+            member1.setUsername("관리자1");
+            em.persist(member1);
+            Member member2 = new Member();
+            member2.setUsername("관리자2");
+            em.persist(member2);
+
+            
+
 
             em.flush();
             em.clear();
-            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
-            List<Team> membersTeam = em.createQuery("select t from Member m join m.team t", Team.class).getResultList();
+            String query = "select t.members From Team t";
+            Collection result = em.createQuery(query, Collection.class).getResultList();
 
-            Member findMember = members.get(0);
-            findMember.setAge(20);
-
-            em.createQuery("select o.address from Order o", Address.class).getResultList();
-            List<MemberDTO> resultList = em.createQuery("select new jpql.MemberDTO (m.username, m.age) from Member m", MemberDTO.class).getResultList();
-
-            MemberDTO memberDTO = resultList.get(0);
-            MemberDTO memberDTO2 = resultList.get(0);
-            memberDTO2.setName("user1");
-            System.out.println("memberDTO = " + memberDTO.getName());
-            System.out.println("memberDTO = " + memberDTO.getAge());
+            for (Object s : result) {
+                System.out.println("s = " + s);
+            }
 
             tx.commit();
         } catch (Exception e) {
