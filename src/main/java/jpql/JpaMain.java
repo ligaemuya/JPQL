@@ -59,24 +59,29 @@ public class JpaMain {
 //            System.out.println("memberDTO = " + memberDTO.getName());
 //            System.out.println("memberDTO = " + memberDTO.getAge());
 
+            Team team = new Team();
+            em.persist(team);
             Member member1 = new Member();
             member1.setUsername("관리자1");
+            member1.setTeam(team);
             em.persist(member1);
             Member member2 = new Member();
             member2.setUsername("관리자2");
+            member2.setTeam(team);
             em.persist(member2);
 
-            
+
 
 
             em.flush();
             em.clear();
-            String query = "select t.members From Team t";
-            Collection result = em.createQuery(query, Collection.class).getResultList();
+            String query = "select t.members.size From Team t";
+            String query2 = "select t.members From Team t";
+            Integer result = em.createQuery(query, Integer.class).getSingleResult();
+            Collection result2 = em.createQuery(query2, Collection.class).getResultList();
+            System.out.println("result = " + result);
+            System.out.println("result2 = " + result2);
 
-            for (Object s : result) {
-                System.out.println("s = " + s);
-            }
 
             tx.commit();
         } catch (Exception e) {
